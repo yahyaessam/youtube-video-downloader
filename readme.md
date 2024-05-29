@@ -20,25 +20,20 @@ Make sure you have the following installed on your local development environment
 
 ### Installation
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/youtube-downloader.git
-    cd youtube-downloader
-    ```
 
-2. Install the dependencies:
+1. Install the dependencies:
     ```sh
     npm install
     ```
 
 ### Running the Application
 
-1. Start the server:
+2. Start the server:
     ```sh
     node server.js
     ```
 
-2. Open your web browser and navigate to `http://localhost:3000`.
+3. Open your web browser and navigate to `http://localhost:3000`.
 
 ### Usage
 
