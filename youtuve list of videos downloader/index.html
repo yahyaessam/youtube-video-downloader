@@ -1,0 +1,506 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* height: 100vh; */
+      color: #333;
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      padding: 15px 25px;
+      background: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    #downloadLinks {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .link-item {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .link-item:hover {
+      background: #f1f1f1;
+    }
+    .link-item a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .link-item a:hover {
+      color: #0056b3;
+    }
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-download"></i> YouTube Video Downloader</h1>
+    <form id="downloadForm">
+      <textarea id="videoURLs" placeholder="Enter YouTube Video URLs (seperated with comma)" required></textarea>
+      <button type="submit">Download Videos</button>
+    </form>
+    <div class="spinner" id="spinner"></div>
+    <div id="downloadLinks"></div>
+  </div>
+  <script>
+    document.getElementById('downloadForm').onsubmit = async function(e) {
+      e.preventDefault(); // Prevent form submission from refreshing the page
+      const videoURLs = document.getElementById('videoURLs').value.split(',').map(url => url.trim()).filter(url => url);
+      const spinner = document.getElementById('spinner');
+      const linksContainer = document.getElementById('downloadLinks');
+      
+      spinner.style.display = 'block';
+      linksContainer.innerHTML = '';
+
+      try {
+        const response = await fetch('/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls: videoURLs })
+        });
+        const data = await response.json();
+        
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          linksContainer.innerText = data.error;
+        } else {
+          linksContainer.innerHTML = data.results.map(video => `
+            <div class="link-item">
+              <strong>${video.videoURL}</strong>
+              ${video.error ? `<p>${video.error}</p>` : video.links.map(link => `
+                <div class="link-item">
+                  <a href="${link.url}" target="_blank" download="${link.title} - ${link.format}">${link.format}</a>
+                  <a href="${link.url}" target="_blank" download="${link.title} - ${link.format}"><i class="fas fa-download"></i></a>
+                </div>
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        spinner.style.display = 'none';
+        linksContainer.innerText = 'An error occurred while fetching the download links.';
+      }
+    };
+  </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      padding: 15px 25px;
+      background: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    #downloadLinks {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .link-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .link-item:hover {
+      background: #f1f1f1;
+    }
+    .link-item a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .link-item a:hover {
+      color: #0056b3;
+    }
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-download"></i> YouTube Video Downloader</h1>
+    <form id="downloadForm">
+      <textarea id="videoURLs" placeholder="Enter YouTube Video URLs (separated with commas)" required></textarea>
+      <button type="submit">Download Videos</button>
+    </form>
+    <div class="spinner" id="spinner"></div>
+    <div id="downloadLinks"></div>
+  </div>
+  <script>
+    document.getElementById('downloadForm').onsubmit = async function(e) {
+      e.preventDefault(); // Prevent form submission from refreshing the page
+      const videoURLs = document.getElementById('videoURLs').value.split(',').map(url => url.trim()).filter(url => url);
+      const spinner = document.getElementById('spinner');
+      const linksContainer = document.getElementById('downloadLinks');
+      
+      spinner.style.display = 'block';
+      linksContainer.innerHTML = '';
+
+      try {
+        const response = await fetch('/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls: videoURLs })
+        });
+        const data = await response.json();
+        
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          linksContainer.innerText = data.error;
+        } else {
+          linksContainer.innerHTML = data.results.map(video => `
+            <div class="link-item">
+              <strong>${video.title} (${video.videoURL})</strong>
+              ${video.error ? `<p>${video.error}</p>` : video.links.map(link => `
+                <div class="link-item">
+                  <a href="${link.url}" target="_blank" download="${link.title}.mp4">Open ${link.title} - ${link.format}</a>
+                  <a href="${link.url}" target="_blank" download="${link.title}.mp4"><i class="fas fa-download"></i> Download ${link.title} - ${link.format}</a>
+                </div>
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        spinner.style.display = 'none';
+        linksContainer.innerText = 'An error occurred while fetching the download links.';
+      }
+    };
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    textarea, input[type="url"] {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      padding: 15px 25px;
+      background: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    #downloadLinks {
+      margin-top: 20px;
+      text-align: left;
+    }
+    .link-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .link-item:hover {
+      background: #f1f1f1;
+    }
+    .link-item a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .link-item a:hover {
+      color: #0056b3;
+    }
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-download"></i> YouTube Video Downloader</h1>
+    <form id="channelForm">
+      <input type="url" id="channelURL" placeholder="Enter YouTube Channel URL" required>
+      <button type="submit">Fetch Video URLs</button>
+    </form>
+    <form id="downloadForm">
+      <textarea id="videoURLs" placeholder="Enter YouTube Video URLs (separated with commas)" required></textarea>
+      <button type="submit">Download Videos</button>
+    </form>
+    <div class="spinner" id="spinner"></div>
+    <div id="downloadLinks"></div>
+  </div>
+  <script>
+    
+    document.getElementById('channelForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const channelURL = document.getElementById('channelURL').value.trim();
+      const spinner = document.getElementById('spinner');
+      const linksContainer = document.getElementById('downloadLinks');
+      
+      spinner.style.display = 'block';
+      linksContainer.innerHTML = '';
+
+      try {
+        const response = await fetch('/fetch-urls', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ channelUrl: channelURL })
+        });
+        const data = await response.json();
+        
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          linksContainer.innerText = data.error;
+        } else {
+          document.getElementById('videoURLs').value = data.videoUrls;
+        }
+      } catch (error) {
+        spinner.style.display = 'none';
+        linksContainer.innerText = 'An error occurred while fetching the video URLs.';
+      }
+    };
+
+    document.getElementById('downloadForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const videoURLs = document.getElementById('videoURLs').value.split(',').map(url => url.trim()).filter(url => url);
+      const spinner = document.getElementById('spinner');
+      const linksContainer = document.getElementById('downloadLinks');
+      
+      spinner.style.display = 'block';
+      linksContainer.innerHTML = '';
+
+      try {
+        const response = await fetch('/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ urls: videoURLs })
+        });
+        const data = await response.json();
+        
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          linksContainer.innerText = data.error;
+        } else {
+          linksContainer.innerHTML = data.results.map(video => `
+            <div class="link-item">
+              <strong>${video.title} <br /> (${video.videoURL})</strong> <br />
+              ${video.error ? `<p>${video.error}</p>` : video.links.map(link => `
+                <div class="link-item">
+                  <a href="${link.url}" target="_blank" download="${link.title}.mp4"><i class="fas fa-download"></i> Download ${link.format}</a>
+                  
+                </div>
+                
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        spinner.style.display = 'none';
+        linksContainer.innerText = 'An error occurred while fetching the download links.';
+      }
+    };
+  </script>
+</body>
+</html>
